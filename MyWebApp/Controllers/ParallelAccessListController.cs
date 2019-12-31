@@ -17,15 +17,15 @@ namespace MyWebApp.Controllers
             _logger = logger;
         }
         [HttpGet("/parallel-list")]
-        public async Task ParallelAsync()
+        public async Task<IActionResult> ParallelAsync()
         {
             var list = new List<int>();
 
             var tasks = new Task[10];
 
-            //var context = new OneAtAtTimeSyncContext();
-            //SynchronizationContext.SetSynchronizationContext(context);
-            
+            var context = new OneAtAtTimeSyncContext();
+            SynchronizationContext.SetSynchronizationContext(context);
+
             for (int i = 0; i < tasks.Length; i++)
             {
                 tasks[i] = GetNumberAsync(list, i);
@@ -34,6 +34,13 @@ namespace MyWebApp.Controllers
             await Task.WhenAll(tasks);
 
             SynchronizationContext.SetSynchronizationContext(null);
+
+            var result = 0;
+            foreach (var item in list)
+            {
+                result += item;
+            }
+            return Ok(result);
         }
 
         private async Task GetNumberAsync(List<int> results, int number)
