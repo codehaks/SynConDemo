@@ -21,19 +21,21 @@ namespace MyWinApp
 
         private async void button1_Click(object sender, EventArgs e)
         {
-
+            
             System.Diagnostics.Trace.WriteLine($"Before delay ...{Thread.CurrentThread.ManagedThreadId}");
 
             await DoAsync().ConfigureAwait(true);
-
+            
             button1.BackColor = Color.Red;
             System.Diagnostics.Trace.WriteLine($"After delay ...{Thread.CurrentThread.ManagedThreadId}");
-
+            
             label1.Text = "Done!";
         }
 
         private async Task DoAsync()
         {
+            //listBox1.Items.Add($"Delay start {Thread.CurrentThread.ManagedThreadId}");
+
             System.Diagnostics.Trace.WriteLine($"DoAsync start ...{Thread.CurrentThread.ManagedThreadId}");
             var clinet = new HttpClient();
             //await clinet.GetAsync("https://codehaks.com");
