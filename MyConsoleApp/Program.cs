@@ -1,39 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace MyWinApp
+namespace MyConsoleApp
 {
-    public partial class Form1 : Form
+    class Program
     {
-        public Form1()
+        static async Task Main(string[] args)
         {
-            InitializeComponent();
-        }
-
-        private async void button1_Click(object sender, EventArgs e)
-        {
+            Console.WriteLine("Hello World!");
 
             System.Diagnostics.Trace.WriteLine($"Before delay ...{Thread.CurrentThread.ManagedThreadId}");
-
-            await DoAsync().ConfigureAwait(true);
-
-            button1.BackColor = Color.Red;
+            await DoAsync();
             System.Diagnostics.Trace.WriteLine($"After delay ...{Thread.CurrentThread.ManagedThreadId}");
 
-            label1.Text = "Done!";
+            Console.WriteLine("Done!");
+
         }
 
-        private async Task DoAsync()
+        private static async Task DoAsync()
         {
+            
+
             System.Diagnostics.Trace.WriteLine($"DoAsync start ...{Thread.CurrentThread.ManagedThreadId}");
             var clinet = new HttpClient();
             //await clinet.GetAsync("https://codehaks.com");
