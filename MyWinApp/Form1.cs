@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TaskManager;
 
 namespace MyWinApp
 {
@@ -22,8 +21,9 @@ namespace MyWinApp
         private async void button1_Click(object sender, EventArgs e)
         {
             listBox1.Items.Add($"Before delay ...{Thread.CurrentThread.ManagedThreadId}");
-            //await DoAsync().ConfigureAwait(true);
-            await DelayMe.DoAsync().ConfigureAwait(false);
+            
+            await DoAsync().ConfigureAwait(false);
+            
             button1.BackColor = Color.Azure;
             listBox1.Items.Add($"After delay...{Thread.CurrentThread.ManagedThreadId}");
             button1.Text = "Hey";
