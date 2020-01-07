@@ -12,7 +12,11 @@ namespace MyConsoleApp
             Console.WriteLine("Hello World!");
 
             System.Diagnostics.Trace.WriteLine($"Before DoAsync...{Thread.CurrentThread.ManagedThreadId}");
-            await DoAsync().ConfigureAwait(true);
+
+            var context = new OneAtATimeSyncContext();
+            SynchronizationContext.SetSynchronizationContext(context);
+
+            await DoAsync();//.ConfigureAwait(true);
             System.Diagnostics.Trace.WriteLine($"After DoAsync ...{Thread.CurrentThread.ManagedThreadId}");
 
             Console.WriteLine("Done!");
@@ -45,10 +49,28 @@ namespace MyConsoleApp
             var t1 = Thread.CurrentThread.ManagedThreadId;
             var clinet = new HttpClient();
             await clinet.GetAsync("https://codehaks.com");
-            var t2 = Thread.CurrentThread.ManagedThreadId;
             //await Task.Delay(1000);
+            var t2 = Thread.CurrentThread.ManagedThreadId;
+            
 
             System.Diagnostics.Trace.WriteLine($"Jumped from {t1} to {t2}");
+        }
+    }
+
+    class OneAtATimeSyncContext : SynchronizationContext
+    {
+        private Task _task = Task.CompletedTask;
+        private object lockObj = new object();
+
+        public override void Post(SendOrPostCallback d, object state)
+        {
+            lock (lockObj)
+            {
+                _task = _task.ContinueWith(_ =>
+                {
+                    d(state);
+                });
+            }
         }
     }
 }
