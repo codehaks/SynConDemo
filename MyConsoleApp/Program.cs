@@ -11,10 +11,7 @@ namespace MyConsoleApp
         {
             Console.WriteLine("Hello World!");
 
-            System.Diagnostics.Trace.WriteLine($"Before DoAsync...{Thread.CurrentThread.ManagedThreadId}");
-
-            var context = new OneAtATimeSyncContext();
-            SynchronizationContext.SetSynchronizationContext(context);
+            System.Diagnostics.Trace.WriteLine($"Before DoAsync...{Thread.CurrentThread.ManagedThreadId}");   
 
             await DoAsync();//.ConfigureAwait(true);
             System.Diagnostics.Trace.WriteLine($"After DoAsync ...{Thread.CurrentThread.ManagedThreadId}");
@@ -57,20 +54,5 @@ namespace MyConsoleApp
         }
     }
 
-    class OneAtATimeSyncContext : SynchronizationContext
-    {
-        private Task _task = Task.CompletedTask;
-        private object lockObj = new object();
-
-        public override void Post(SendOrPostCallback d, object state)
-        {
-            lock (lockObj)
-            {
-                _task = _task.ContinueWith(_ =>
-                {
-                    d(state);
-                });
-            }
-        }
-    }
+   
 }
