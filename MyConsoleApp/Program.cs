@@ -11,9 +11,9 @@ namespace MyConsoleApp
         {
             Console.WriteLine("Hello World!");
 
-            System.Diagnostics.Trace.WriteLine($"Before DoAsync...{Thread.CurrentThread.ManagedThreadId}");   
+            System.Diagnostics.Trace.WriteLine($"Before DoAsync...{Thread.CurrentThread.ManagedThreadId}");
 
-            await DoAsync();//.ConfigureAwait(true);
+            await DoAsync().ConfigureAwait(true);
             System.Diagnostics.Trace.WriteLine($"After DoAsync ...{Thread.CurrentThread.ManagedThreadId}");
 
             Console.WriteLine("Done!");
